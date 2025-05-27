@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>产品展示 - 农乐创想</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* ==================== 动画效果 ==================== */
+        /* 淡入动画 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* 从下方滑入 */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 从左侧滑入 */
+        @keyframes slideLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* 从右侧滑入 */
+        @keyframes slideRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* 缩放出现 */
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* 应用动画的类 */
+        .animate {
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .fade-in {
+            animation-name: fadeIn;
+            animation-duration: 0.8s;
+        }
+
+        .slide-up {
+            animation-name: slideUp;
+            animation-duration: 0.8s;
+        }
+
+        .slide-left {
+            animation-name: slideLeft;
+            animation-duration: 0.8s;
+        }
+
+        .slide-right {
+            animation-name: slideRight;
+            animation-duration: 0.8s;
+        }
+
+        .scale-in {
+            animation-name: scaleIn;
+            animation-duration: 0.6s;
+        }
+
+        /* 延迟动画 */
+        .delay-1 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.6s;
+        }
+
+        .delay-4 {
+            animation-delay: 0.8s;
+        }
+
+        .delay-5 {
+            animation-delay: 1s;
+        }
+
+        /* 悬停动画 */
+        .hover-grow {
+            transition: transform 0.3s ease;
+        }
+
+        .hover-grow:hover {
+            transform: scale(1.03);
+        }
+
+        /* 卡片悬停效果增强 */
+        .product-card {
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(85, 107, 47, 0.15);
+        }
+
+        /* 导航链接下划线动画 */
+        .nav a::after {
+            transition: width 0.4s ease, background-color 0.3s;
+        }
+
+        /* 按钮脉冲效果 */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pulse:hover {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* 图片缩放效果 */
+        .product-image {
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        .product-image:hover {
+            transform: scale(1.02);
+        }
+
+        /* 缩略图悬停效果 */
+        .product-thumbnail {
+            transition: all 0.3s ease;
+        }
+
+        .product-thumbnail:hover {
+            opacity: 1;
+            transform: scale(1.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        :root {
+            --beige: #f5f5f0;
+            --light-brown: #e8d8c3;
+            --dark-green: #556b2f;
+            --gold: #d4af37;
+            --dark-gold: #b8860b;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: var(--beige);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--beige), var(--light-brown));
+            height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: bold;
+            color: var(--dark-green);
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin: 20px auto;
+            max-width: 800px;
+            border: 1px solid rgba(210, 180, 140, 0.3);
+        }
+
+        .nav a {
+            margin: 0 1.5rem;
+            text-decoration: none;
+            color: var(--dark-green);
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--dark-green);
+            transition: width 0.3s;
+        }
+
+        .nav a:hover::after {
+            width: 100%;
+        }
+
+        .products-container {
+            padding: 3rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            color: var(--dark-green);
+            margin-bottom: 3rem;
+            font-size: 2.2rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--gold);
+            margin: 1rem auto;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            color: var(--dark-green);
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
+
+        .product-desc {
+            color: #666;
+            margin: 0 0 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .product-price {
+            color: var(--dark-gold);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .add-to-cart {
+            display: inline-block;
+            background: var(--gold);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: var(--dark-gold);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            background: linear-gradient(135deg, var(--light-brown), var(--beige));
+            padding: 2rem 1rem;
+            text-align: center;
+            color: var(--dark-green);
+            position: relative;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--dark-green);
+            text-decoration: none;
+            margin: 0 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        .footer-links span {
+            color: var(--dark-green);
+            opacity: 0.5;
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 40px;
+            height: 40px;
+            background: var(--gold);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--dark-gold);
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav a {
+                margin: 0.5rem 0;
+            }
+
+            .back-to-top {
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+
+        /* 新增分类导航样式 */
+        .category-nav {
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .category-list {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow-x: auto;
+            padding: 0.5rem 0;
+        }
+
+        .category-item {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background: var(--light-brown);
+            color: var(--dark-green);
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .category-item.active {
+            background: var(--gold);
+            color: white;
+        }
+
+        .category-item:hover {
+            background: var(--dark-gold);
+            color: white;
+        }
+
+        /* 产品卡片增强样式 */
+        .product-gallery {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .product-main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.5s;
+        }
+
+        .product-thumbnails {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .product-thumbnail {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            border: 2px solid white;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+
+        .product-thumbnail:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .product-details {
+            padding: 1.5rem;
+        }
+
+        .product-specs {
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .product-specs dt {
+            font-weight: bold;
+            color: var(--dark-green);
+            margin-top: 0.5rem;
+        }
+
+        .product-story {
+            background: rgba(139, 115, 85, 0.05);
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .product-reviews {
+            height: 100px;
+            overflow-y: auto;
+            padding: 0.5rem;
+            background: rgba(139, 115, 85, 0.05);
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* 对比工具样式 */
+        /* 新增对比工具样式 */
+        .compare-section {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 3rem auto;
+            max-width: 1200px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .compare-intro {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--dark-green);
+        }
+
+        .compare-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .compare-option {
+            position: relative;
+        }
+
+        .compare-checkbox {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .compare-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 1rem;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            width: 120px;
+        }
+
+        .compare-checkbox:checked+.compare-label {
+            background: var(--gold);
+            color: white;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+
+        .compare-thumb {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 0.5rem;
+            border: 2px solid var(--light-brown);
+        }
+
+        .compare-btn {
+            background: var(--dark-green);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            transition: all 0.3s;
+        }
+
+        .compare-btn:hover {
+            background: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .compare-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .compare-results {
+            margin-top: 2rem;
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .reset-btn {
+            background: none;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .reset-btn:hover {
+            background: var(--gold);
+            color: white;
+        }
+
+        .feature-category {
+            margin-bottom: 2rem;
+        }
+
+        .category-title {
+            color: var(--dark-green);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .feature-row {
+            display: flex;
+            padding: 0.8rem 0;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-name {
+            width: 150px;
+            font-weight: bold;
+            color: var(--dark-green);
+        }
+
+        .feature-values {
+            display: flex;
+            flex: 1;
+            gap: 1.5rem;
+        }
+
+        .feature-value {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .compare-chart {
+            margin: 2rem 0;
+            height: 300px;
+            background: rgba(139, 115, 85, 0.03);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .compare-summary {
+            background: rgba(139, 115, 85, 0.05);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .compare-selector {
+                gap: 1rem;
+            }
+
+            .compare-label {
+                width: 100px;
+                padding: 0.8rem;
+            }
+
+            .feature-row {
+                flex-direction: column;
+            }
+
+            .feature-name {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .feature-values {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="logo animate slide-up delay-1">农乐创想</div>
+        <div class="nav">
+            <a href="index.html" class="animate slide-up delay-2">首页</a>
+            <a href="products.html" class="animate slide-up delay-3">产品</a>
+            <a href="about.html" class="animate slide-up delay-4">关于我们</a>
+            <a href="contact.html" class="animate slide-up delay-5">联系我们</a>
+        </div>
+    </div>
+
+
+    <!-- 新增分类导航 -->
+    <div class="category-nav animate fade-in delay-2">
+        <div class="category-list">
+            <div class="category-item active">全部产品</div>
+            <div class="category-item">热带水果</div>
+            <div class="category-item">有机蔬菜</div>
+            <div class="category-item">优质粮油</div>
+            <div class="category-item">禽蛋肉类</div>
+            <div class="category-item">海产品</div>
+            <div class="category-item">特色加工品</div>
+        </div>
+    </div>
+
+    <div class="products-container">
+        <h2 class="section-title animate slide-up delay-3">我们的产品</h2>
+        <div class="products-grid">
+            <!-- 增强后的产品卡片 -->
+            <div class="product-card animate scale-in delay-4">
+                <div class="product-gallery">
+                    <img src="images/mango.png" alt="黄灯笼辣酱" class="product-main-image">
+                    <div class="product-thumbnails">
+                        <img src="images/mango-1.png" class="product-thumbnail">
+                        <img src="images/mango-2.png" class="product-thumbnail">
+                        <img src="images/mango-3.png" class="product-thumbnail">
+                    </div>
+                </div>
+                <div class="product-details">
+                    <h3 class="product-name">黄灯笼辣酱</h3>
+                    <p class="product-desc">风味独特、辣味十足，辣而不上火</p>
+
+                    <dl class="product-specs">
+                        <dt>规格</dt>
+                        <dd>单果重约500-800g</dd>
+                        <dt>产地</dt>
+                        <dd>海南三亚</dd>
+                        <dt>保质期</dt>
+                        <dd>常温7天，冷藏15天</dd>
+                    </dl>
+
+                    <div class="product-story">
+                        <h4>产品吃法</h4>
+                        <p>1、作为蘸料：黄灯笼辣椒酱可以直接作为蘸料，搭配各种小吃，如炸物、春卷等，增添辣味和风味。 
+                            2、炒海鲜：在炒制虾、蟹等海鲜时，可以将黄灯笼辣椒酱与蒜末、姜末一起炒香，再加入海鲜翻炒，最后调味。 
+                            3、炒肉类：猪肉、牛肉或鸡肉等肉类也可以用黄灯笼辣椒酱进行炒制。将肉类切片，用料酒、生抽腌制片刻，然后与辣椒酱一起炒香。 
+                            4、拌面或拌饭：将煮熟的面条或米饭放入碗中，加入适量的黄灯笼辣椒酱、葱花、香菜等拌匀，制作出美味的辣味面食或米饭。
+                            </p>
+                    </div>
+
+                    <div class="product-reviews">
+                        <h4>用户评价</h4>
+                        <p>"非常好吃，风味独特，已经回购多次了！" - 张女士</p>
+                        <p>"包装很好，收到时很新鲜" - 李先生</p>
+                    </div>
+
+                    <p class="product-price">¥28.8/斤</p>
+
+                    <div class="product-actions">
+                        <a href="#" class="add-to-cart">加入购物车</a>
+                        <a href="#" class="add-to-cart" style="background: var(--dark-green);">咨询购买</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card animate scale-in delay-5">
+                <div class="product-gallery">
+                    <img src="images/dragon-fruit.jpg" alt="山栏酒" class="product-main-image">
+                    <div class="product-thumbnails">
+                        <img src="images/dragon-fruit-1.jpg" class="product-thumbnail">
+                        <img src="images/dragon-fruit-2.jpg" class="product-thumbnail">
+                        <img src="images/dragon-fruit-3.jpg" class="product-thumbnail">
+                    </div>
+                </div>
+                <div class="product-details">
+                    <h3 class="product-name">山栏酒</h3>
+                    <p class="product-desc">海南特色山栏酒，营养丰富，口感细腻</p>
+
+                    <dl class="product-specs">
+                        <dt>规格</dt>
+                        <dd>单果重约400-600g</dd>
+                        <dt>产地</dt>
+                        <dd>海南乐东</dd>
+                        <dt>保质期</dt>
+                        <dd>常温5天，冷藏10天</dd>
+                        <dt>酒精度</dt>
+                        <dd>16-18°</dd>
+                    </dl>
+
+                    <div class="product-story">
+                        <h4>产品吃法</h4>
+                        <p>无酒不成席，没酒不成宴，有朋自远方来，应以好酒相迎，共品山栏酒的醇香，追寻生活的诗与远方。
+                    </div>
+
+                    <div class="product-reviews">
+                        <h4>用户评价</h4>
+                        <p>"酒精度刚好，喝起来舒服" - 王女士</p>
+                        <p>"酒的颜色特别漂亮，用来做菜很合适" - 陈先生</p>
+                        <p>"包装很用心，收到时都很完整" - 林小姐</p>
+                    </div>
+
+                    <p class="product-price">¥32.5/斤</p>
+
+                    <div class="product-actions">
+                        <a href="#" class="add-to-cart">加入购物车</a>
+                        <a href="#" class="add-to-cart" style="background: var(--dark-green);">咨询购买</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card animate scale-in delay-6">
+                <div class="product-gallery">
+                    <img src="images/coconut.png" alt="大叶茶" class="product-main-image">
+                    <div class="product-thumbnails">
+                        <img src="images/coconut-1.png" class="product-thumbnail">
+                        <img src="images/coconut-2.png" class="product-thumbnail">
+                        <img src="images/coconut-3.png" class="product-thumbnail">
+                    </div>
+                </div>
+                <div class="product-details">
+                    <h3 class="product-name">大叶茶</h3>
+                    <p class="product-desc">新鲜采摘，茶叶清甜</p>
+
+                    <dl class="product-specs">
+                        <dt>规格</dt>
+                        <dd>单果重约1.2-1.5kg</dd>
+                        <dt>产地</dt>
+                        <dd>海南文昌</dd>
+                        <dt>保质期</dt>
+                        <dd>常温15天，冷藏30天</dd>
+                        <dt>盒子含量</dt>
+                        <dd>约500-700克/盒</dd>
+                    </dl>
+
+                    <div class="product-story">
+                        <h4>产品吃法</h4>
+                        <p>用量：以海南大叶苦丁茶为例，一天食用4-5根（1.5-2克），可以用开水冲泡，反复续水直到没有味道为止，一周食用3-5次即可。 
+                           冲泡：对于云南大白毫茶，冲泡时水温应控制在90度左右，使用软水（如天然矿泉水）会更好。 
+                        </p>
+                    </div>
+
+                    <div class="product-reviews">
+                        <h4>用户评价</h4>
+                        <p>"夏天喝太解渴了" - 黄女士</p>
+                        <p>"包装很结实，收到时一个都没破" - 赵先生</p>
+                        <p>"茶特别清甜，比超市买的新鲜多了" - 刘小姐</p>
+                    </div>
+
+                    <p class="product-price">¥15.0/盒</p>
+
+                    <div class="product-actions">
+                        <a href="#" class="add-to-cart">加入购物车</a>
+                        <a href="#" class="add-to-cart" style="background: var(--dark-green);">咨询购买</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card animate scale-in delay-7">
+                <div class="product-gallery">
+                    <img src="images/banana.png" alt="野生蜂蜜" class="product-main-image">
+                    <div class="product-thumbnails">
+                        <img src="images/banana-1.png" class="product-thumbnail">
+                        <img src="images/banana-2.png" class="product-thumbnail">
+                        <img src="images/banana-3.png" class="product-thumbnail">
+                    </div>
+                </div>
+                <div class="product-details">
+                    <h3 class="product-name">野生蜂蜜</h3>
+                    <p class="product-desc">自然成熟，香甜，营养丰富</p>
+
+                    <dl class="product-specs">
+                        <dt>规格</dt>
+                        <dd>单把约1.5-2kg</dd>
+                        <dt>产地</dt>
+                        <dd>海南澄迈</dd>
+                        <dt>保质期</dt>
+                        <dd>常温5-7天</dd>
+                        <dt>甜度</dt>
+                        <dd>18-20°</dd>
+                    </dl>
+
+                    <div class="product-story">
+                        <h4>产品吃法</h4>
+                        <p>蜂蜜水的正确喝法是用温水冲泡，最佳饮用时间为早餐后半小时和晚餐后1-2小时。
+                    </div>
+
+                    <div class="product-reviews">
+                        <h4>用户评价</h4>
+                        <p>"味道刚很好，是正宗的蜂蜜" - 李女士</p>
+                        <p>"给孩子做辅食特别合适，很香很糯" - 张先生</p>
+                        <p>"很新鲜" - 王小姐</p>
+                    </div>
+
+                    <p class="product-price">¥32.8/瓶</p>
+
+                    <div class="product-actions">
+                        <a href="#" class="add-to-cart">加入购物车</a>
+                        <a href="#" class="add-to-cart" style="background: var(--dark-green);">咨询购买</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增产品对比工具 -->
+    <div class="compare-section animate fade-in delay-4">
+        <h2 class="section-title">产品对比工具</h2>
+        <div class="compare-intro">
+            <p>选择2-4款产品进行详细比较，帮助您做出最佳选择</p>
+        </div>
+
+        <div class="compare-controls animate slide-up delay-5">
+            <div class="compare-selector">
+                <div class="compare-option">
+                    <input type="checkbox" id="compare-mango" class="compare-checkbox">
+                    <label for="compare-mango" class="compare-label hover-grow">
+                        <img src="images/mango.png" alt="山栏茶" class="compare-thumb">
+                        <span>黄灯笼辣酱</span>
+                    </label>
+                </div>
+
+                <div class="compare-option">
+                    <input type="checkbox" id="compare-dragonfruit" class="compare-checkbox">
+                    <label for="compare-dragonfruit" class="compare-label hover-grow">
+                        <img src="images/banana.png" alt="野生蜂蜜" class="compare-thumb">
+                        <span>野生蜂蜜</span>
+                    </label>
+                </div>
+
+                <div class="compare-option">
+                    <input type="checkbox" id="compare-coconut" class="compare-checkbox">
+                    <label for="compare-coconut" class="compare-label hover-grow">
+                        <img src="images/dragon-fruit.jpg" alt="海南椰子" class="compare-thumb">
+                        <span>山栏酒</span>
+                    </label>
+                </div>
+
+                <div class="compare-option">
+                    <input type="checkbox" id="compare-banana" class="compare-checkbox">
+                    <label for="compare-banana" class="compare-label hover-grow">
+                        <img src="images/coconut.png" alt="大叶茶" class="compare-thumb">
+                        <span>大叶茶</span>
+                    </label>
+                </div>
+            </div>
+
+            <button class="compare-btn pulse" id="startCompare">开始比较</button>
+        </div>
+
+        <div class="compare-results animate scale-in" id="compareResults" style="display: none;">
+            <div class="results-header">
+                <h3>产品对比结果</h3>
+                <button class="reset-btn" id="resetCompare">重新选择</button>
+            </div>
+
+            <div class="compare-features">
+                <div class="feature-category">
+                    <h4 class="category-title">基本信息</h4>
+                    <div class="feature-row">
+                        <div class="feature-name">产品名称</div>
+                        <div class="feature-values">
+                            <div class="feature-value" data-product="mango">山栏茶</div>
+                            <div class="feature-value" data-product="dragonfruit">野生蜂蜜</div>
+                            <div class="feature-value" data-product="coconut">海南椰子</div>
+                            <div class="feature-value" data-product="banana">大叶茶</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-row">
+                        <div class="feature-name">产地</div>
+                        <div class="feature-values">
+                            <div class="feature-value" data-product="mango">海南三亚</div>
+                            <div class="feature-value" data-product="dragonfruit">海南乐东</div>
+                            <div class="feature-value" data-product="coconut">海南文昌</div>
+                            <div class="feature-value" data-product="banana">海南澄迈</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-row">
+                        <div class="feature-name">价格</div>
+                        <div class="feature-values">
+                            <div class="feature-value" data-product="mango">¥28.8/斤</div>
+                            <div class="feature-value" data-product="dragonfruit">¥32.5/斤</div>
+                            <div class="feature-value" data-product="coconut">¥15.0/个</div>
+                            <div class="feature-value" data-product="banana">¥12.8/斤</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-category">
+                    <h4 class="category-title">规格参数</h4>
+                    <div class="feature-row">
+                        <div class="feature-name">重量规格</div>
+                        <div class="feature-values">
+                            <div class="feature-value" data-product="mango">500-800g/个</div>
+                            <div class="feature-value" data-product="dragonfruit">400-600g/个</div>
+                            <div class="feature-value" data-product="coconut">1.2-1.5kg/个</div>
+                            <div class="feature-value" data-product="banana">1.5-2kg/把</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-row">
+                        <div class="feature-name">保质期</div>
+                        <div class="feature-values">
+                            <div class="feature-value" data-product="mango">常温7天</div>
+                            <div class="feature-value" data-product="dragonfruit">常温5天</div>
+                            <div class="feature-value" data-product="coconut">常温15天</div>
+                            <div class="feature-value" data-product="banana">常温5-7天</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-row">
+                        <div class="feature-name">甜度</div>
+                        <div class="feature-values">
+                            <div class="feature-value" data-product="mango">高甜度</div>
+                            <div class="feature-value" data-product="dragonfruit">16-18°Brix</div>
+                            <div class="feature-value" data-product="coconut">自然清甜</div>
+                            <div class="feature-value" data-product="banana">18-20°</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-category">
+                    <h4 class="category-title">营养价值</h4>
+                    <div class="feature-row">
+                        <div class="feature-name">维生素含量</div>
+                        <div class="feature-values">
+                            <div class="feature-value" data-product="mango">富含维生素A、C</div>
+                            <div class="feature-value" data-product="dragonfruit">富含花青素</div>
+                            <div class="feature-value" data-product="coconut">电解质丰富</div>
+                            <div class="feature-value" data-product="banana">高钾低钠</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-row">
+                        <div class="feature-name">适合人群</div>
+                        <div class="feature-values">
+                            <div class="feature-value" data-product="mango">全年龄段</div>
+                            <div class="feature-value" data-product="dragonfruit">美容养颜</div>
+                            <div class="feature-value" data-product="coconut">运动补水</div>
+                            <div class="feature-value" data-product="banana">婴幼儿辅食</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-category">
+                    <h4 class="category-title">用户评价</h4>
+                    <div class="feature-row">
+                        <div class="feature-name">好评率</div>
+                        <div class="feature-values">
+                            <div class="feature-value" data-product="mango">98%</div>
+                            <div class="feature-value" data-product="dragonfruit">96%</div>
+                            <div class="feature-value" data-product="coconut">97%</div>
+                            <div class="feature-value" data-product="banana">95%</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-row">
+                        <div class="feature-name">典型评价</div>
+                        <div class="feature-values">
+                            <div class="feature-value" data-product="mango">"非常甜，果肉细腻"</div>
+                            <div class="feature-value" data-product="dragonfruit">"颜色漂亮，营养丰富"</div>
+                            <div class="feature-value" data-product="coconut">"夏天解暑必备"</div>
+                            <div class="feature-value" data-product="banana">"香甜软糯，孩子喜欢"</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="compare-chart">
+                <canvas id="productChart" width="400" height="200"></canvas>
+            </div>
+
+            <div class="compare-summary">
+                <h4>对比总结</h4>
+                <p id="comparisonSummary">请选择2-4款产品进行比较，系统将自动生成对比分析报告...</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="footer animate fade-in delay-7">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="privacy.html">隐私政策</a>
+                <span>|</span>
+                <a href="terms.html">服务条款</a>
+                <span>|</span>
+                <a href="about.html">关于我们</a>
+            </div>
+            <p class="copyright">© 2023 农乐创想 版权所有</p>
+        </div>
+        <div class="back-to-top" id="backToTop">↑</div>
+    </div>
+
+    <script>
+
+        // 对比工具交互功能
+        document.addEventListener('DOMContentLoaded', function () {
+            const compareBtn = document.getElementById('startCompare');
+            const resetBtn = document.getElementById('resetCompare');
+            const compareResults = document.getElementById('compareResults');
+            const checkboxes = document.querySelectorAll('.compare-checkbox');
+
+            // 更新比较按钮状态
+            function updateCompareButton() {
+                const checkedCount = document.querySelectorAll('.compare-checkbox:checked').length;
+                compareBtn.disabled = checkedCount < 2 || checkedCount > 4;
+            }
+
+            // 初始化比较功能
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    updateCompareButton();
+
+                    // 限制最多选择4个
+                    const checkedCount = document.querySelectorAll('.compare-checkbox:checked').length;
+                    if (checkedCount > 4) {
+                        this.checked = false;
+                        updateCompareButton();
+                    }
+                });
+            });
+
+            // 开始比较
+            compareBtn.addEventListener('click', function () {
+                const checkedProducts = Array.from(document.querySelectorAll('.compare-checkbox:checked'))
+                    .map(cb => cb.id.replace('compare-', ''));
+
+                if (checkedProducts.length >= 2 && checkedProducts.length <= 4) {
+                    // 显示结果区域
+                    compareResults.style.display = 'block';
+
+                    // 滚动到结果区域
+                    compareResults.scrollIntoView({ behavior: 'smooth' });
+
+                    // 只显示选中的产品列
+                    document.querySelectorAll('.feature-value').forEach(value => {
+                        value.style.display = 'none';
+                    });
+
+                    checkedProducts.forEach(product => {
+                        document.querySelectorAll(`.feature-value[data-product="${product}"]`).forEach(value => {
+                            value.style.display = 'block';
+                        });
+                    });
+
+                    // 更新对比总结
+                    updateComparisonSummary(checkedProducts);
+
+                    // 绘制图表
+                    renderComparisonChart(checkedProducts);
+                }
+            });
+
+            // 重置比较
+            resetBtn.addEventListener('click', function () {
+                checkboxes.forEach(cb => cb.checked = false);
+                compareResults.style.display = 'none';
+                updateCompareButton();
+            });
+
+            // 更新对比总结
+            function updateComparisonSummary(products) {
+                const summaryText = {
+                    'mango': '山栏茶以高甜度和细腻果肉著称，适合喜欢甜食的消费者。',
+                    'dragonfruit': '山栏酒电解质丰富，是天然的运动饮料，特别适合夏季解暑。',
+                    'coconut': '野生蜂蜜富含花青素，具有美容养颜功效，深受女性喜爱。',
+                    'banana': '大叶茶高钾低钠，是健康零食和婴幼儿辅食的优质选择。'
+                };
+
+                let summary = products.map(p => summaryText[p]).join(' ');
+                summary += ' 根据您的需求选择最适合的产品。';
+
+                document.getElementById('comparisonSummary').textContent = summary;
+            }
+
+            // 绘制对比图表
+            // 修改后的 renderComparisonChart 函数
+            function renderComparisonChart(products) {
+                const ctx = document.getElementById('productChart').getContext('2d');
+
+                // 确保 canvas 元素存在
+                if (!ctx) {
+                    console.error('Canvas context not found');
+                    return;
+                }
+
+                // 安全销毁现有图表
+                if (window.productChart && typeof window.productChart.destroy === 'function') {
+                    window.productChart.destroy();
+                    window.productChart = null; // 清除引用
+                }
+
+                // 模拟数据
+                const productNames = products.map(p => ({
+                    'mango': '山栏茶',
+                    'dragonfruit': '野生蜂蜜',
+                    'coconut': '海南椰子',
+                    'banana': '大叶茶'
+                }[p]));
+
+                const priceData = products.map(p => ({
+                    'mango': 28.8,
+                    'dragonfruit': 32.5,
+                    'coconut': 15.0,
+                    'banana': 12.8
+                }[p]));
+
+                const ratingData = products.map(p => ({
+                    'mango': 4.9,
+                    'dragonfruit': 4.8,
+                    'coconut': 4.85,
+                    'banana': 4.75
+                }[p]));
+
+                // 创建新图表（添加错误处理）
+                try {
+                    window.productChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: productNames,
+                            datasets: [
+                                {
+                                    label: '价格 (元)',
+                                    data: priceData,
+                                    backgroundColor: 'rgba(85, 107, 47, 0.7)',
+                                    borderColor: 'rgba(85, 107, 47, 1)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: '用户评分 (5分制)',
+                                    data: ratingData,
+                                    backgroundColor: 'rgba(212, 175, 55, 0.7)',
+                                    borderColor: 'rgba(212, 175, 55, 1)',
+                                    borderWidth: 1,
+                                    type: 'line',
+                                    yAxisID: 'y1'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            animation: {
+                                duration: 1000,
+                                easing: 'easeOutQuart'
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: { display: true, text: '价格 (元)' }
+                                },
+                                y1: {
+                                    position: 'right',
+                                    beginAtZero: true,
+                                    max: 5,
+                                    title: { display: true, text: '用户评分' },
+                                    grid: { drawOnChartArea: false }
+                                }
+                            }
+                        }
+                    });
+                } catch (error) {
+                    console.error('图表创建失败:', error);
+                    // 显示友好的错误信息
+                    document.getElementById('comparisonSummary').textContent =
+                        '图表加载失败，请刷新页面重试。错误: ' + error.message;
+                }
+            }
+            // 初始化时更新按钮状态
+            updateCompareButton();
+        });
+        // 滚动动画效果
+        document.addEventListener('DOMContentLoaded', function () {
+            // 初始加载动画
+            const animatedElements = document.querySelectorAll('.animate');
+
+            // 初始显示动画
+            setTimeout(() => {
+                animatedElements.forEach(el => {
+                    if (isElementInViewport(el)) {
+                        el.style.opacity = 1;
+                    }
+                });
+            }, 100);
+
+            // 滚动时检查元素是否进入视口
+            window.addEventListener('scroll', handleScrollAnimation);
+
+            // 初始检查一次
+            handleScrollAnimation();
+
+            // 图片缩略图切换功能
+            const thumbnails = document.querySelectorAll('.product-thumbnail');
+            thumbnails.forEach(thumb => {
+                thumb.addEventListener('click', function () {
+                    const gallery = this.closest('.product-gallery');
+                    const mainImg = gallery.querySelector('.product-main-image');
+                    mainImg.src = this.src.replace('-1', '').replace('-2', '').replace('-3', '');
+
+                    // 添加点击动画
+                    this.style.transform = 'scale(1.3)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1.1)';
+                    }, 200);
+                });
+            });
+
+            // 分类导航点击效果
+            const categoryItems = document.querySelectorAll('.category-item');
+            categoryItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    categoryItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // 添加点击动画
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 200);
+                });
+            });
+        });
+
+        // 检查元素是否在视口中
+        function isElementInViewport(el) {
+            const rect = el.getBoundingClientRect();
+            return (
+                rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.bottom >= 0
+            );
+        }
+
+        // 处理滚动动画
+        function handleScrollAnimation() {
+            const elements = document.querySelectorAll('.animate');
+
+            elements.forEach(el => {
+                if (isElementInViewport(el)) {
+                    el.style.opacity = 1;
+                }
+            });
+        }
+
+        // 返回顶部按钮功能
+        const backToTopBtn = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', function () {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        backToTopBtn.addEventListener('click', function () {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+
+</html>
